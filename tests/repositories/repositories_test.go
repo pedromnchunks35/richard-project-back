@@ -3,21 +3,24 @@ package repositories
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
+	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
+	"github.com/testcontainers/testcontainers-go/wait"
+	"log"
 	"richard-project-back/configs/connector/postgresql"
 	"testing"
+	"time"
 )
 
-var username string = ""
-var database string = ""
-var password string = ""
-var ip string = ""
-var port string = ""
+var username string = "root"
+var database string = "postgres"
+var password string = "12341234"
 
 var pgContainer *postgres.PostgresContainer
 var dbVault *postgresql.PostgresDbVault
 
 func before(t *testing.T) {
+	dbVault = &postgresql.PostgresDbVault{}
 	context := context.Background()
 	pgContainerLocal, err := postgres.Run(
 		context,
@@ -25,41 +28,58 @@ func before(t *testing.T) {
 		postgres.WithDatabase(database),
 		postgres.WithUsername(username),
 		postgres.WithPassword(password),
+		testcontainers.WithWaitStrategy(
+			wait.ForLog("database system is ready to accept connections").WithOccurrence(2).WithStartupTimeout(5*time.Second),
+		),
 	)
 	if err != nil {
 		t.Fatalf("error trying to create the postgres container: %s", err.Error())
 	}
+
 	pgContainer = pgContainerLocal
 }
 
-func after(t *testing.T) {
+func after() {
 	err := pgContainer.Terminate(context.Background())
 	if err != nil {
-		t.Fatalf("error terminating the container %s", err)
+		log.Fatalf("error terminating the container %s", err.Error())
 	}
 }
 
 func Test_db_connection(t *testing.T) {
 	before(t)
+	t.Cleanup(after)
 	ctx := context.Background()
 
-	containerIp, err := pgContainer.ContainerIP(ctx)
+	connectionString, err := pgContainer.ConnectionString(ctx, "sslmode=disable")
 	assert.Nil(t, err)
 
-	ports, err := pgContainer.Ports(ctx)
+	conn, err := dbVault.InitDbConnection(connectionString)
 	assert.Nil(t, err)
 
-	port, ok := ports["5432/tcp"]
-	assert.True(t, ok)
+	createTableResponse, err := dbVault.ExecuteNonQuery("CREATE TABLE USERS(ID SERIAL PRIMARY KEY,USERNAME TEXT NOT NULL);")
+	assert.Nil(t, err)
+	assert.Equal(t, createTableResponse, int64(0))
 
-	mappedPort := port[0].HostPort
+	insertDataResponse, err := dbVault.ExecuteNonQuery("INSERT INTO USERS (USERNAME) VALUES ('LOL');")
+	assert.Nil(t, err)
+	assert.Equal(t, insertDataResponse, int64(1))
 
-	dbVault.InitDbConnection(&postgresql.DbProfile{
-		Username: username,
-		Password: password,
-		Ip:       containerIp,
-		Port:     mappedPort,
-		DbName:   database,
-	})
-	after(t)
+	queryResponse, err := dbVault.ExecuteQuery("SELECT * FROM USERS;")
+	assert.Nil(t, err)
+	id := 0
+	name := ""
+	rows := (*queryResponse)
+	defer rows.Close()
+	for rows.Next() {
+		if err := rows.Scan(&id, &name); err != nil {
+			t.Fatalf("failed to scan row: %v", err)
+		}
+	}
+	assert.Equal(t, name, "LOL")
+	assert.Equal(t, id, 1)
+
+	defer conn.Close(context.Background())
+
+	assert.Nil(t, err)
 }
