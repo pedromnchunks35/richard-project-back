@@ -1,6 +1,7 @@
-package image
+package repositories
+
 type Image struct {
-	Id      int64 `json:"id"`
-    Name   	string `json:"name"`
-    Base64  string `json:"base64"`
+	Id     int64  `json:"id"`
+	Name   string `json:"name"`
+	Base64 string `json:"base64"`
 }

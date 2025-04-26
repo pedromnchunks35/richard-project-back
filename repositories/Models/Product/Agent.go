@@ -1,6 +1,6 @@
-package agent
+package repositories
 
 type Agent struct {
-	Id int64 `json:"id"`
+	Id   int64  `json:"id"`
 	Name string `json:"name"`
 }
