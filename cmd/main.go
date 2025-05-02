@@ -2,17 +2,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"richard-project-back/controllers"
 	"richard-project-back/routes"
 	"richard-project-back/services"
+
+	"github.com/joho/godotenv"
 )
 
 var helloWorldService services.HelloWorldService
 var helloWorldController controllers.HelloWorldController
 var helloWorldRoute routes.HelloWorldRoute
+
+var productService services.ProductService
+var productController controllers.ProductController
+var productRoute routes.ProductRoute
 
 func main() {
 	err := godotenv.Load(".env")
@@ -24,6 +29,11 @@ func main() {
 	helloWorldController = controllers.RegisterHelloWorldControllerImpl(helloWorldService)
 	helloWorldRoute = routes.HelloWorldRouteImpl{}
 
+	productService = services.ProductServiceImpl{}
+	productController = controllers.RegisterProductControllerImpl(productService)
+	productRoute = routes.ProductRouteImpl{}
+
+	productRoute.RegisterProductRoute(productController)
 	helloWorldRoute.RegisterHelloWorldRoutes(helloWorldController)
 
 	port := os.Getenv("SERVER_PORT")
