@@ -20,6 +20,50 @@ func (h ProductControllerImpl) GetProduct(context *gin.Context) {
 		return
 	}
 
+	result := h.ProductService.GetProduct(1)
+	apiResponses.SuccessResponse(context, result, "SUCCESS")
+}
+func (h ProductControllerImpl) InsertProduct(context *gin.Context) {
+	product := &dtos.Product{}
+	err := context.BindJSON(product)
+	if err != nil {
+		apiResponses.BadArgumentsResponse(context, err.Error())
+		return
+	}
+
+	result := h.ProductService.InsertProduct(product)
+	apiResponses.SuccessResponse(context, result, "SUCCESS")
+}
+func (h ProductControllerImpl) RemoveProduct(context *gin.Context) {
+	product := &dtos.Product{}
+	err := context.BindJSON(product)
+	if err != nil {
+		apiResponses.BadArgumentsResponse(context, err.Error())
+		return
+	}
+
+	result := h.ProductService.RemoveProduct(1)
+	apiResponses.SuccessResponse(context, result, "SUCCESS")
+}
+func (h ProductControllerImpl) UpdateProduct(context *gin.Context) {
+	product := &dtos.Product{}
+	err := context.BindJSON(product)
+	if err != nil {
+		apiResponses.BadArgumentsResponse(context, err.Error())
+		return
+	}
+
+	result := h.ProductService.UpdateProduct(1,product)
+	apiResponses.SuccessResponse(context, result, "SUCCESS")
+}
+func (h ProductControllerImpl) Teste(context *gin.Context) {
+	product := &dtos.Product{}
+	err := context.BindJSON(product)
+	if err != nil {
+		apiResponses.BadArgumentsResponse(context, err.Error())
+		return
+	}
+
 	result := h.ProductService.Teste()
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }

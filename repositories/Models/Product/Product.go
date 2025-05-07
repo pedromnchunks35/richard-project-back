@@ -6,3 +6,6 @@ type Product struct {
 	IdCategory int64  `json:"id_category"`
 	IdImage    int64  `json:"id_image"`
 }
+func NewProduct() *Product {
+	return &Product{}
+}
