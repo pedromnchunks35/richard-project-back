@@ -9,9 +9,13 @@ type Product struct {
 }
 
 type Category struct {
+	Id uint `json:"id"`
 }
 
 type Image struct {
+	Id     uint   `json:"id"`
+	Name   string `json:"name"`
+	Base64 string `json:"base64"`
 }
 
 type Detail struct {

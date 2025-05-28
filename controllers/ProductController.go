@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"richard-project-back/dtos"
+	"richard-project-back/helper/convert"
 	"richard-project-back/services"
 	"richard-project-back/utils/apiResponses"
 
@@ -31,7 +32,7 @@ func (h ProductControllerImpl) InsertProduct(context *gin.Context) {
 		return
 	}
 
-	result := h.ProductService.InsertProduct(product)
+	result := h.ProductService.InsertProduct(convert.ConvertProductDtoToRepository(product))
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
 func (h ProductControllerImpl) RemoveProduct(context *gin.Context) {
@@ -53,7 +54,7 @@ func (h ProductControllerImpl) UpdateProduct(context *gin.Context) {
 		return
 	}
 
-	result := h.ProductService.UpdateProduct(1,product)
+	result := h.ProductService.UpdateProduct(1, convert.ConvertProductDtoToRepository(product))
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
 func (h ProductControllerImpl) Teste(context *gin.Context) {
