@@ -2,6 +2,7 @@ package services
 
 import (
 	"richard-project-back/dtos"
+	"richard-project-back/repositories"
 )
 
 type ProductService interface {
@@ -9,7 +10,7 @@ type ProductService interface {
 	GetProduct(Id int64) dtos.Product
 	GetImage(Id int64) dtos.Image
 	GetDetail(Id int64) dtos.Detail
-	InsertProduct(product *dtos.Product) bool
+	InsertProduct(product *repositories.Product) bool
 	RemoveProduct(Id int64) bool
-	UpdateProduct(Id int64, product *dtos.Product) bool
+	UpdateProduct(Id int64, product *repositories.Product) bool
 }

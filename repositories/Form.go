@@ -14,3 +14,7 @@ type Form struct {
 	IdIntervention int64  `json:"id_intervention"`
 	IdFormProducts int64  `json:"id_form_products"`
 }
+
+func GetForm(id int64) *Form {
+	return &Form{}
+}

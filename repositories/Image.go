@@ -6,6 +6,10 @@ type Image struct {
 	Base64 string `json:"base64"`
 }
 
-func NewImage() Image {
-	return Image{}
+func NewImage() *Image {
+	return &Image{}
+}
+
+func GetImage(id int64) *Image {
+	return NewImage()
 }
