@@ -1,10 +1,11 @@
 package tests
 
 import (
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
 	"richard-project-back/mocks"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_mock_test(t *testing.T) {
@@ -15,3 +16,12 @@ func Test_mock_test(t *testing.T) {
 	result := helloWorldRepositoryMock.GetHelloWorld()
 	assert.Equal(t, "Hello World", result)
 }
+
+// func Test_Product_mock_test(t *testing.T) {
+// 	controller := gomock.NewController(t)
+// 	prodRepositoryMock := mocks.NewMockFormRepository(controller)
+// 	prodRepositoryMock.EXPECT().Test().Return("Good")
+
+// 	result := prodRepositoryMock.Test()
+// 	assert.Equal(t, "Good", result)
+// }
