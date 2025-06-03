@@ -20,7 +20,7 @@ func (h FormController) GetForm(context *gin.Context) {
 		return
 	}
 
-	result := h.FormService.GetForm(form.Id)
+	result, err := h.FormService.GetForm(form.Id)
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
 

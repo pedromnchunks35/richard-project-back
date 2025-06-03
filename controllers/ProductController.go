@@ -20,8 +20,7 @@ func (h ProductController) GetProduct(context *gin.Context) {
 		apiResponses.BadArgumentsResponse(context, err.Error())
 		return
 	}
-
-	result := h.ProductService.GetProduct(1)
+	result, err := h.ProductService.GetProduct(1)
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
 
@@ -32,8 +31,8 @@ func (h ProductController) GetProductDetail(context *gin.Context) {
 		apiResponses.BadArgumentsResponse(context, err.Error())
 		return
 	}
+	result, err := h.ProductService.GetProductDetail(1)
 
-	result := h.ProductService.GetProductDetail(1)
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
 

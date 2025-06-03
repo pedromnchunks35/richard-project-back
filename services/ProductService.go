@@ -1,16 +1,21 @@
 package services
 
 import (
+	sql "richard-project-back/configs/connector/postgresql"
+		"richard-project-back/helper"
 	model "richard-project-back/repositories/Models"
 	queryList "richard-project-back/repositories/Queries"
 	iService "richard-project-back/services/ServicesInterface"
 )
 
 type ProductService struct {
+	db *sql.PostgresDbVault
 }
 
-func NewProductService() iService.IProductService {
-	return &ProductService{}
+func NewProductService(db *sql.PostgresDbVault) iService.IProductService {
+	return &ProductService{
+		db:db
+	}
 }
 
 func (s *ProductService) TesteProduct() string {
@@ -19,20 +24,33 @@ func (s *ProductService) TesteProduct() string {
 
 //GET ----
 
-func (s *ProductService) GetProduct(id int64) string {
+func (s *ProductService) GetProduct(id int64) ([]byte,error) {
 	var query = queryList.QueryGetProductByID
-	var json = ExecuteQuery(query)
-	return json
+		rows, err := s.db.ExecuteQuery(query)
+	if err != nil {
+		return nil, err
+	}
+
+	return helper.RowsToJSON(*rows)
+
 }
-func (s *ProductService) GetAllProducts() string {
+func (s *ProductService) GetAllProducts() ([]byte,error) {
 	var query = queryList.QueryGetProductByID
-	var json = ExecuteQuery(query)
-	return json
+	rows, err := s.db.ExecuteQuery(query)
+	if err != nil {
+		return nil, err
+	}
+
+	return helper.RowsToJSON(*rows)
 }
-func (s *ProductService) GetProductDetail(id int64) string {
+func (s *ProductService) GetProductDetail(id int64) ([]byte,error) {
 	var query = queryList.QueryGetDetailsByProductID
-	var json = ExecuteQuery(query)
-	return json
+	rows, err := s.db.ExecuteQuery(query)
+	if err != nil {
+		return nil, err
+	}
+
+	return helper.RowsToJSON(*rows)
 }
 
 //INSERT ----
@@ -42,9 +60,13 @@ func (s *ProductService) InsertProduct(product *model.Product) bool {
 		return false
 	}
 	var query = queryList.QueryInsertProduct
-	var json = ExecuteQuery(query)
+	rowsAffected, err := s.db.ExecuteNonQuery(query)
+	if err != nil {
+		fmt.Println("Erro ao inserir:", err)
+		return false
+	}
 
-	return json == ""
+	return rowsAffected > 0
 }
 
 // UPDATE ----
@@ -53,9 +75,13 @@ func (s *ProductService) UpdateProduct(id int64, product *model.Product) bool {
 		return false
 	}
 	var query = queryList.QueryUpdateProduct
-	var json = ExecuteQuery(query)
+	rowsAffected, err := s.db.ExecuteNonQuery(query)
+	if err != nil {
+		fmt.Println("Erro ao atualizar:", err)
+		return false
+	}
 
-	return json == ""
+	return rowsAffected > 0
 }
 
 // DELETE ----
@@ -64,6 +90,11 @@ func (s *ProductService) DeleteProduct(id int64) bool {
 		return false
 	}
 	var query = queryList.QueryInsertProduct
-	var json = ExecuteQuery(query)
-	return json == ""
+	rowsAffected, err := s.db.ExecuteNonQuery(query)
+	if err != nil {
+		fmt.Println("Erro ao apagar:", err)
+		return false
+	}
+
+	return rowsAffected > 0
 }

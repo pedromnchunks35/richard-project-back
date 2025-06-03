@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	sql "richard-project-back/configs/connector/postgresql"
 	"richard-project-back/controllers"
 	"richard-project-back/routes"
 	"richard-project-back/services"
@@ -29,6 +30,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("error loading the environment variables %s\n", err.Error())
 	}
+	vault := &sql.PostgresDbVault{}
+	vault.InitDbConnection("-")
+	formService := services.NewFormService(vault)
 
 	helloWorldService = services.HelloWorldServiceImpl{}
 	helloWorldController = controllers.RegisterHelloWorldControllerImpl(helloWorldService)
