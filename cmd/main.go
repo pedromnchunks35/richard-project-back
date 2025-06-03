@@ -32,17 +32,16 @@ func main() {
 	}
 	vault := &sql.PostgresDbVault{}
 	vault.InitDbConnection("-")
-	formService := services.NewFormService(vault)
 
 	helloWorldService = services.HelloWorldServiceImpl{}
 	helloWorldController = controllers.RegisterHelloWorldControllerImpl(helloWorldService)
 	helloWorldRoute = routes.HelloWorldRouteImpl{}
 
-	productService = services.NewProductService()
+	productService = services.NewProductService(vault)
 	productController = *controllers.RegisterProductController(productService)
 	productRoute = routes.ProductRoute{}
 
-	formService = services.NewFormService()
+	formService = services.NewFormService(vault)
 	formController = *controllers.RegisterFormController(formService)
 	formRoute = routes.FormRoute{}
 

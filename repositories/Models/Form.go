@@ -30,6 +30,5 @@ func NewForm(dto *dtos.Form) *Form {
 		WithDelivery:   dto.WithDelivery,
 		Observations:   dto.Observations,
 		IdIntervention: dto.Intervetion.Id,
-		IdFormProducts: dto.FormProducts[0].Id,
 	}
 }

@@ -98,3 +98,11 @@ func RowsToJSON(rows pgx.Rows) ([]byte, error) {
 
 	return json.Marshal(results)
 }
+func JsonToProductList(jsonData []byte) ([]repositories.Product, error) {
+	var products []repositories.Product
+	err := json.Unmarshal(jsonData, &products)
+	if err != nil {
+		return nil, err
+	}
+	return products, nil
+}

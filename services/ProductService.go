@@ -1,8 +1,9 @@
 package services
 
 import (
+	"fmt"
 	sql "richard-project-back/configs/connector/postgresql"
-		"richard-project-back/helper"
+	"richard-project-back/helper"
 	model "richard-project-back/repositories/Models"
 	queryList "richard-project-back/repositories/Queries"
 	iService "richard-project-back/services/ServicesInterface"
@@ -12,10 +13,8 @@ type ProductService struct {
 	db *sql.PostgresDbVault
 }
 
-func NewProductService(db *sql.PostgresDbVault) iService.IProductService {
-	return &ProductService{
-		db:db
-	}
+func NewProductService(dtab *sql.PostgresDbVault) iService.IProductService {
+	return &ProductService{db: dtab}
 }
 
 func (s *ProductService) TesteProduct() string {
@@ -24,9 +23,9 @@ func (s *ProductService) TesteProduct() string {
 
 //GET ----
 
-func (s *ProductService) GetProduct(id int64) ([]byte,error) {
+func (s *ProductService) GetProduct(id int64) ([]byte, error) {
 	var query = queryList.QueryGetProductByID
-		rows, err := s.db.ExecuteQuery(query)
+	rows, err := s.db.ExecuteQuery(query)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +33,7 @@ func (s *ProductService) GetProduct(id int64) ([]byte,error) {
 	return helper.RowsToJSON(*rows)
 
 }
-func (s *ProductService) GetAllProducts() ([]byte,error) {
+func (s *ProductService) GetAllProducts() ([]byte, error) {
 	var query = queryList.QueryGetProductByID
 	rows, err := s.db.ExecuteQuery(query)
 	if err != nil {
@@ -43,7 +42,7 @@ func (s *ProductService) GetAllProducts() ([]byte,error) {
 
 	return helper.RowsToJSON(*rows)
 }
-func (s *ProductService) GetProductDetail(id int64) ([]byte,error) {
+func (s *ProductService) GetProductDetail(id int64) ([]byte, error) {
 	var query = queryList.QueryGetDetailsByProductID
 	rows, err := s.db.ExecuteQuery(query)
 	if err != nil {
