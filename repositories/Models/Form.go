@@ -17,9 +17,6 @@ type Form struct {
 	IdFormProducts int64  `json:"id_form_products"`
 }
 
-func GetForm(id int64) *Form {
-	return &Form{}
-}
 func NewForm(dto *dtos.Form) *Form {
 	return &Form{
 		Id:             dto.Id,
@@ -32,7 +29,7 @@ func NewForm(dto *dtos.Form) *Form {
 		Address:        dto.Address,
 		WithDelivery:   dto.WithDelivery,
 		Observations:   dto.Observations,
-		IdIntervention: dto.IdIntervetion.Id,
-		IdFormProducts: dto.FormProducts.Id,
+		IdIntervention: dto.Intervetion.Id,
+		IdFormProducts: dto.FormProducts[0].Id,
 	}
 }

@@ -3,17 +3,17 @@ package controllers
 import (
 	"richard-project-back/dtos"
 	"richard-project-back/helper"
-	"richard-project-back/services"
+	iService "richard-project-back/services/ServicesInterface"
 	"richard-project-back/utils/apiResponses"
 
 	"github.com/gin-gonic/gin"
 )
 
-type ProductControllerImpl struct {
-	ProductService services.ProductService
+type ProductController struct {
+	ProductService iService.IProductService
 }
 
-func (h ProductControllerImpl) GetProduct(context *gin.Context) {
+func (h ProductController) GetProduct(context *gin.Context) {
 	product := &dtos.Product{}
 	err := context.BindJSON(product)
 	if err != nil {
@@ -24,7 +24,20 @@ func (h ProductControllerImpl) GetProduct(context *gin.Context) {
 	result := h.ProductService.GetProduct(1)
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
-func (h ProductControllerImpl) InsertProduct(context *gin.Context) {
+
+func (h ProductController) GetProductDetail(context *gin.Context) {
+	product := &dtos.Product{}
+	err := context.BindJSON(product)
+	if err != nil {
+		apiResponses.BadArgumentsResponse(context, err.Error())
+		return
+	}
+
+	result := h.ProductService.GetProductDetail(1)
+	apiResponses.SuccessResponse(context, result, "SUCCESS")
+}
+
+func (h ProductController) InsertProduct(context *gin.Context) {
 	product := &dtos.Product{}
 	err := context.BindJSON(product)
 	if err != nil {
@@ -35,7 +48,7 @@ func (h ProductControllerImpl) InsertProduct(context *gin.Context) {
 	result := h.ProductService.InsertProduct(helper.ConvertProductDtoToRepository(product))
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
-func (h ProductControllerImpl) RemoveProduct(context *gin.Context) {
+func (h ProductController) DeleteProduct(context *gin.Context) {
 	product := &dtos.Product{}
 	err := context.BindJSON(product)
 	if err != nil {
@@ -43,10 +56,10 @@ func (h ProductControllerImpl) RemoveProduct(context *gin.Context) {
 		return
 	}
 
-	result := h.ProductService.RemoveProduct(1)
+	result := h.ProductService.DeleteProduct(1)
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
-func (h ProductControllerImpl) UpdateProduct(context *gin.Context) {
+func (h ProductController) UpdateProduct(context *gin.Context) {
 	product := &dtos.Product{}
 	err := context.BindJSON(product)
 	if err != nil {
@@ -57,7 +70,7 @@ func (h ProductControllerImpl) UpdateProduct(context *gin.Context) {
 	result := h.ProductService.UpdateProduct(1, helper.ConvertProductDtoToRepository(product))
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
-func (h ProductControllerImpl) Teste(context *gin.Context) {
+func (h ProductController) Teste(context *gin.Context) {
 	product := &dtos.Product{}
 	err := context.BindJSON(product)
 	if err != nil {
@@ -65,12 +78,12 @@ func (h ProductControllerImpl) Teste(context *gin.Context) {
 		return
 	}
 
-	result := h.ProductService.Teste()
+	result := h.ProductService.TesteProduct()
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
 
-func RegisterProductControllerImpl(service services.ProductService) *ProductControllerImpl {
-	return &ProductControllerImpl{
+func RegisterProductController(service iService.IProductService) *ProductController {
+	return &ProductController{
 		ProductService: service,
 	}
 }

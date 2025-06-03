@@ -7,17 +7,22 @@ import (
 	"richard-project-back/controllers"
 	"richard-project-back/routes"
 	"richard-project-back/services"
+	iService "richard-project-back/services/ServicesInterface"
 
 	"github.com/joho/godotenv"
 )
 
-var helloWorldService services.HelloWorldService
+var helloWorldService iService.IHelloWorldService
 var helloWorldController controllers.HelloWorldController
 var helloWorldRoute routes.HelloWorldRoute
 
-var productService services.ProductService
+var productService iService.IProductService
 var productController controllers.ProductController
 var productRoute routes.ProductRoute
+
+var formService iService.IFormService
+var formController controllers.FormController
+var formRoute routes.FormRoute
 
 func main() {
 	err := godotenv.Load(".env")
@@ -29,9 +34,13 @@ func main() {
 	helloWorldController = controllers.RegisterHelloWorldControllerImpl(helloWorldService)
 	helloWorldRoute = routes.HelloWorldRouteImpl{}
 
-	productService = services.ProductServiceImpl{}
-	productController = controllers.RegisterProductControllerImpl(productService)
-	productRoute = routes.ProductRouteImpl{}
+	productService = services.NewProductService()
+	productController = *controllers.RegisterProductController(productService)
+	productRoute = routes.ProductRoute{}
+
+	formService = services.NewFormService()
+	formController = *controllers.RegisterFormController(formService)
+	formRoute = routes.FormRoute{}
 
 	productRoute.RegisterProductRoute(productController)
 	helloWorldRoute.RegisterHelloWorldRoutes(helloWorldController)

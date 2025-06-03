@@ -2,7 +2,7 @@ package helper
 
 import (
 	"richard-project-back/dtos"
-	"richard-project-back/repositories"
+	repositories "richard-project-back/repositories/Models"
 )
 
 func ConvertListDtoProd(products []dtos.Product) *[]repositories.Product {

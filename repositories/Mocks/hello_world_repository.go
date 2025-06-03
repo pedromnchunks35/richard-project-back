@@ -1,4 +1,4 @@
-package repositories
+package mocks
 
 type HelloWorldRepository interface {
 	GetHelloWorld() string

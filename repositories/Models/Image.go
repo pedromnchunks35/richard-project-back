@@ -5,11 +5,3 @@ type Image struct {
 	Name   string `json:"name"`
 	Base64 string `json:"base64"`
 }
-
-func NewImage() *Image {
-	return &Image{}
-}
-
-func GetImage(id int64) *Image {
-	return NewImage()
-}

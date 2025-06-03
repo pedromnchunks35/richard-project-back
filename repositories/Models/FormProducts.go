@@ -10,7 +10,3 @@ type FormProducts struct {
 	Y                 float64 `json:"y"`
 	Z                 float64 `json:"z"`
 }
-
-func GetFormProduct(id int64) *FormProducts {
-	return &FormProducts{}
-}

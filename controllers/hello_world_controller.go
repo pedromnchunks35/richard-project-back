@@ -1,14 +1,15 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"richard-project-back/dtos"
-	"richard-project-back/services"
+	iService "richard-project-back/services/ServicesInterface"
 	"richard-project-back/utils/apiResponses"
+
+	"github.com/gin-gonic/gin"
 )
 
 type HelloWorldControllerImpl struct {
-	HelloWorldService services.HelloWorldService
+	HelloWorldService iService.IHelloWorldService
 }
 
 func (h HelloWorldControllerImpl) GetHelloWorld(context *gin.Context) {
@@ -23,7 +24,7 @@ func (h HelloWorldControllerImpl) GetHelloWorld(context *gin.Context) {
 	apiResponses.SuccessResponse(context, result, "SUCCESS")
 }
 
-func RegisterHelloWorldControllerImpl(service services.HelloWorldService) *HelloWorldControllerImpl {
+func RegisterHelloWorldControllerImpl(service iService.IHelloWorldService) *HelloWorldControllerImpl {
 	return &HelloWorldControllerImpl{
 		HelloWorldService: service,
 	}
