@@ -3,8 +3,9 @@ package postgresql
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx/v4"
 	"sync"
+
+	"github.com/jackc/pgx/v4"
 )
 
 type PostgresDbVault struct {
@@ -26,7 +27,7 @@ func (p *PostgresDbVault) InitDbConnection(connectionString string) (*pgx.Conn, 
 	p.initializer.Do(func() {
 		conn, connErr := pgx.Connect(context.Background(), connectionString)
 		if connErr != nil {
-			fmt.Printf("error creating the initial connection %s", err.Error())
+			fmt.Printf("error creating the initial connection %s\n", connErr.Error())
 			return
 		}
 		p.Db = conn

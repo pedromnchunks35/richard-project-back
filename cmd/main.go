@@ -26,12 +26,19 @@ var formController controllers.FormController
 var formRoute routes.FormRoute
 
 func main() {
+
+	fmt.Println("----------------STARTING MAIN--------------")
 	err := godotenv.Load(".env")
+	fmt.Println(".ENV:", err)
 	if err != nil {
 		log.Fatalf("error loading the environment variables %s\n", err.Error())
 	}
+	dir, err := os.Getwd()
+	fmt.Println("Current working directory:", dir)
+
 	vault := &sql.PostgresDbVault{}
-	vault.InitDbConnection("-")
+	connStr := os.Getenv("DATABASE_URL")
+	vault.InitDbConnection(connStr)
 
 	helloWorldService = services.HelloWorldServiceImpl{}
 	helloWorldController = controllers.RegisterHelloWorldControllerImpl(helloWorldService)

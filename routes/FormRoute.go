@@ -5,12 +5,12 @@ import "richard-project-back/controllers"
 type FormRoute struct{}
 
 func (h FormRoute) RegisterFormRoute(controller controllers.FormController) {
-	routeObject.Group("/")
+	routeObject.Group("/form")
 	{
-		routeObject.GET("/", controller.GetForm)
-		routeObject.GET("/", controller.InsertForm)
-		routeObject.GET("/", controller.DeleteForm)
-		routeObject.GET("/", controller.UpdateForm)
-		routeObject.GET("/", controller.Teste)
+		routeObject.GET("/get", controller.GetForm)
+		routeObject.GET("/insert", controller.InsertForm)
+		routeObject.GET("/delete", controller.DeleteForm)
+		routeObject.GET("/update", controller.UpdateForm)
+		routeObject.GET("/test", controller.Teste)
 	}
 }

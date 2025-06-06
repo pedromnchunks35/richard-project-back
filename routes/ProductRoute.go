@@ -5,12 +5,12 @@ import "richard-project-back/controllers"
 type ProductRoute struct{}
 
 func (h ProductRoute) RegisterProductRoute(controller controllers.ProductController) {
-	routeObject.Group("/")
+	routeObject.Group("/product")
 	{
-		routeObject.GET("/", controller.GetProduct)
-		routeObject.GET("/", controller.InsertProduct)
-		routeObject.GET("/", controller.DeleteProduct)
-		routeObject.GET("/", controller.UpdateProduct)
-		routeObject.GET("/", controller.Teste)
+		routeObject.GET("/get", controller.GetProduct)
+		routeObject.GET("/insert", controller.InsertProduct)
+		routeObject.GET("/delete", controller.DeleteProduct)
+		routeObject.GET("/update", controller.UpdateProduct)
+		routeObject.GET("/test", controller.Teste)
 	}
 }
